@@ -7,7 +7,7 @@ title-slide-attributes:
     data-background-image: pics/mpi-bridge.gif
 parallaxBackgroundImage: pics/csc-en.svg
 parallaxBackgroundSize: 1000px 1200px
-bibliography: nn-nse-ldlpv-talk.bib
+# bibliography: nn-nse-ldlpv-talk.bib
 ---
 
 # Introduction 
@@ -124,7 +124,7 @@ V =
 V_1 & V_2 & \dotsm & V_r
 \end{bmatrix}
 $$
-be a, say, *POD* basis with $$v(t)=\tilde v(t) =\approx VV^Tv(t),$$
+be a, say, *POD* basis with $$v(t)=\tilde v(t) \approx VV^Tv(t),$$
 
 * then $$\rho(v(t)) = V^Tv(t)$$ is a parametrization.
 
@@ -303,5 +303,3 @@ The limit cycle:
 . . .
 
 Thank You!
-
----
