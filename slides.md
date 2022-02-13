@@ -2,7 +2,7 @@
 author: 
  - Jan Heiland & Peter Benner (MPI Magdeburg)
 title: Convolutional AEs for low-dimensional parameterizations of Navier-Stokes flow
-subtitle: IFAC Seminar -- Data-driven Methods in Control -- 2021
+subtitle: CSC Ringberg Workshop -- 2022
 title-slide-attributes:
     data-background-image: pics/mpi-bridge.gif
 parallaxBackgroundImage: pics/csc-en.svg
