@@ -60,9 +60,46 @@ $$
 
 ---
 
-The *linear parameter varying* (LPV) representation/approximation
+Consider an ODE with $x(t)\in \mathbb R^n$ and some $\beta \in \mathbb R^n$:
+
+$$\dot x = (x\cdot \beta )\, x.$$
+
+. . .
+
+In a *reduced order model* with left projection matrix $\tilde V\in \mathbb R^{n,r}$: 
+$$ x \approx \tilde x = \tilde V\rho = \Sigma_{i=1}^r \tilde V_i \rho_i$$
+
+. . .
+
+where $\rho(x)$ are the reduced coordinates ...
+
+---
+
+With this **linear** *decoding* $$\tilde x = \tilde V \rho = \Sigma_{i=1}^r \tilde V_i \rho_i,$$ 
+
+. . .
+
+the **quadratic** ODE can be approximated as
+
+. . .
+
+$$\dot x = (x\cdot \beta )\, x \approx (\tilde x\cdot \beta )\, x = (\tilde V \rho \cdot \beta )\, x = \bigl[ \Sigma_i \rho_i (\tilde V_i \cdot \beta )\bigr]\, x$$
+
+. . .
+
+with a **matrix** coefficient 
+$$\Sigma_i \rho_i (\tilde V_i \cdot \beta )\in \mathbb R^{n,n}$$
+
+. . .
+
+with *affine parameter dependency*.
+
+---
+
+
+Not a real MOR, but the *linear parameter varying* (LPV) representation/approximation
 $$
-\dot x = \approx  [A_0+\Sigma \,\rho_k(x)A_k]\, x + Bu
+\dot x \approx  \bigl [\Sigma \,\rho_i(x)A_i\bigr]\, x
 $$
 with **affine parameter dependency** can be exploited for designing nonlinear controller through scheduling.
 
@@ -130,11 +167,11 @@ be a, say, *POD* basis with $$v(t)=\tilde v(t) \approx VV^Tv(t),$$
 
 ---
 
-* And with $$\tilde v = VV^Tv = V\rho = \sum_{k=1}^rV_k\rho_k,$$
+* And with $$\tilde v = VV^Tv = V\rho = \sum_{i=1}^rV_i\rho_i,$$
 
 * the NSE has the low-dimensional LPV representation via
 $$
-(v\cdot \nabla) v \approx (\tilde v \cdot \nabla) v = [\sum_{k=1}^r\rho_k(V_k\cdot \nabla)]\,v.
+(v\cdot \nabla) v \approx (\tilde v \cdot \nabla) v = [\sum_{i=1}^r\rho_i(V_i\cdot \nabla)]\,v.
 $$
 
 ## Question
@@ -229,7 +266,7 @@ which includes
 Simulation parameters:
 
  * Cylinder wake at $\mathsf{Re}=40$, time in $[0, 50]$
- * *Taylor-Hood* finite elements with over 60000 degrees of freedom
+ * *Taylor-Hood* finite elements with over `60000` degrees of freedom
  * `2000` snapshots/data points on $[0, 8]$ for the POD and CNN
 
 :::
@@ -249,8 +286,7 @@ CNN parameters:
    * convolutional layers
      * `kernelsize, stride = 5, 2`
    * one activated linear layer $\to \rho$
-   * one linear layer $\rho \to \tilde \rho$
- * variable `code size` -- dimension of the parametrization $\rho$
+   * one linear layer $\rho \mapsto \tilde \rho$
 
 :::
 
@@ -262,8 +298,7 @@ CNN parameters:
 
 Simulation parameters:
 
- * The nonlinearity $(v\cdot \nabla)v$ of the NSE
- * is replaced by $$\bigl[\frac 12 (W\rho \cdot \nabla)v +  (v\cdot \nabla)W\rho\bigr]$$
+ * The nonlinearity $(v\cdot \nabla)v$ of the NSE is replaced by $$\frac 12 \bigl[(W\rho \cdot \nabla)v +  (v\cdot \nabla)W\rho\bigr]$$
  * with $\rho = \rho (v) \in \mathbb R^{3}$
  * encoded and decoded through
    * plain POD or
