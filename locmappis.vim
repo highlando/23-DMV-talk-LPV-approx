@@ -4,3 +4,4 @@ imap kk \
 imap ii $
 imap bg \begin{}<CR>\end{}<esc>O
 imap pmo ^{-1}
+imap ,eq \begin{equation*}<CR>\end{equation*}<esc>O

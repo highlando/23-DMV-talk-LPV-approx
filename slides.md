@@ -1,13 +1,15 @@
 ---
 author: 
  - Jan Heiland & Peter Benner (MPI Magdeburg)
-title: Convolutional AEs for low-dimensional parameterizations of Navier-Stokes flow
-subtitle: CSC Ringberg Workshop -- 2022
+title: Very LD parametrizations of fluid flow for nonlinear controller design
+subtitle: ORCOS -- Vienna -- July 2022
 title-slide-attributes:
     data-background-image: pics/mpi-bridge.gif
 parallaxBackgroundImage: pics/csc-en.svg
 parallaxBackgroundSize: 1000px 1200px
-# bibliography: nn-nse-ldlpv-talk.bib
+bibliography: nn-nse-ldlpv-talk.bib
+nocite: |
+  @*
 ---
 
 # Introduction 
@@ -55,49 +57,12 @@ A general approach would include
 # LPV Representation
 
 $$
-\dot x = f(x) \approx A(x)\,x \approx [A_0+\Sigma \,\rho_k(x)A_k]\, x
+\dot x = f(x) \quad = A(x)\,x \approx [A_0+\Sigma \,\rho_k(x)A_k]\, x
 $$
 
 ---
 
-Consider an ODE with $x(t)\in \mathbb R^n$ and some $\beta \in \mathbb R^n$:
-
-$$\dot x = (x\cdot \beta )\, x.$$
-
-. . .
-
-In a *reduced order model* with left projection matrix $\tilde V\in \mathbb R^{n,r}$: 
-$$ x \approx \tilde x = \tilde V\rho = \Sigma_{i=1}^r \tilde V_i \rho_i$$
-
-. . .
-
-where $\rho(x)$ are the reduced coordinates ...
-
----
-
-With this **linear** *decoding* $$\tilde x = \tilde V \rho = \Sigma_{i=1}^r \tilde V_i \rho_i,$$ 
-
-. . .
-
-the **quadratic** ODE can be approximated as
-
-. . .
-
-$$\dot x = (x\cdot \beta )\, x \approx (\tilde x\cdot \beta )\, x = (\tilde V \rho \cdot \beta )\, x = \bigl[ \Sigma_i \rho_i (\tilde V_i \cdot \beta )\bigr]\, x$$
-
-. . .
-
-with a **matrix** coefficient 
-$$\Sigma_i \rho_i (\tilde V_i \cdot \beta )\in \mathbb R^{n,n}$$
-
-. . .
-
-with *affine parameter dependency*.
-
----
-
-
-Not a real MOR, but the *linear parameter varying* (LPV) representation/approximation
+The *linear parameter varying* (LPV) representation/approximation
 $$
 \dot x \approx  \bigl [\Sigma \,\rho_i(x)A_i\bigr]\, x
 $$
@@ -119,124 +84,24 @@ with some $A\colon \mathbb R^{n} \to \mathbb R^{n\times n}$.
 
 ---
 
- * Any MOR scheme that compresses the state and *POD* and lifts it back
+ * Any MOR scheme that compresses ($\mathcal P$) the state and lifts ($\mathcal L$) it back
  $$
- \tilde x = \mathcal L(\hat x) = \mathcal L (\mathcal P(x))
+ \tilde x = \mathcal L(\hat x) = \mathcal L (\mathcal P(x)) \approx x
  $$
+
+. . .
+
  * gives a low-dimensional LPV approximation by means of $\rho = \mathcal P(x)$ and
  $$
  \dot x = A(x)\,x \approx A(\tilde x)\, x = A(\mathcal L \rho (x))\,x.
  $$
- * **Observation**: If $x\mapsto A(x)$ is linear as is $\mathcal L$, then this LPV approximation is **linear**.
-
-# Low-dimensional LPV for NSE
-
-**LPV Approximation** of *Navier-Stokes Equations* by *POD* and *Convolutional Neural Networks*
-
----
-
-
-## {data-background-image="pics/cw-Re60-t161-cm-bbw.png" data-background-size="cover"}
 
 . . .
 
-::: {style="position: absolute; width: 60%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 40px; text-align: left;"}
-The *Navier-Stokes* equations
-
-$$
-\dot v + (v\cdot \nabla) v- \frac{1}{\mathsf{Re}}\Delta v + \nabla p= f, 
-$$
-
-$$
-\nabla \cdot v = 0.
-$$
-:::
-
----
-
-* Let $v$ be the velocity solution and let
-$$
-V =
-\begin{bmatrix}
-V_1 & V_2 & \dotsm & V_r
-\end{bmatrix}
-$$
-be a, say, *POD* basis with $$v(t)=\tilde v(t) \approx VV^Tv(t),$$
-
-* then $$\rho(v(t)) = V^Tv(t)$$ is a parametrization.
-
----
-
-* And with $$\tilde v = VV^Tv = V\rho = \sum_{i=1}^rV_i\rho_i,$$
-
-* the NSE has the low-dimensional LPV representation via
-$$
-(v\cdot \nabla) v \approx (\tilde v \cdot \nabla) v = [\sum_{i=1}^r\rho_i(V_i\cdot \nabla)]\,v.
-$$
-
-## Question
-
-Can we do better than POD?
-
-## {data-background-image="pics/scrsho-lee-cb.png"}
-
-. . .
-
-::: {style="position: absolute; width: 60%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 40px; text-align: left;"}
-
-Lee/Carlberg (2019): *MOR of dynamical systems on nonlinear manifolds using deep convolutional autoencoders*
-:::
-
-## {data-background-image="pics/scrsho-choi.png"}
-
-. . .
-
-::: {style="position: absolute; width: 60%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 40px; text-align: left;"}
-
-Kim/Choi/Widemann/Zodi (2020): *Efficient nonlinear manifold reduced order model*
-:::
-
-## Convolution Autoencoders for NSE
-
-1. Consider solution snapshots $v(t_k)$ as pictures.
-
-2. Learn convolutional kernels to extract relevant features.
-
-3. While extracting the features, we reduce the dimensions.
-
-4. Encode $v(t_k)$ in a low-dimensional $\rho_k$.
-
-## Our Example Architecture Implementation
-
-
-## {data-background-image="pics/nse-cnn.jpg"}
-
-. . .
-
-::: {style="position: absolute; width: 60%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 40px; text-align: left;"}
-
- * A number of convolutional layers for feature extraction and reduction
-
- * A full linear layer with nonlinear activation for the final encoding $\rho\in \mathbb R^{r}$
-
- * A linear layer (w/o activation) that expands $\rho \to \tilde \rho\in \mathbb R^{k}$.
-
- * And $\tilde \rho$ is used as "parametrized POD coordinates"
-
-:::
-
-## Training for minimizing:
-$$
-\| v_i - VW\rho(v_i)\|^2_M + 
-\| (v_i\cdot \nabla)v_i - (VW\rho_i \cdot \nabla )v_i\|^2_{M^{-1}}
-$$
-which includes
-
- 1. the POD modes $V\in \mathbb R^{n\times k}$,
-
- 2. a learned weight matrix $W\in \mathbb R^{k\times r}\colon \rho \mapsto \tilde \rho$,
-
- 3. the mass matrix $M$ (and it's inverse) of the FEM discretization.
+ * **Observation**: 
+   * If $x\mapsto A(x)$ is linear 
+   * and $\mathcal L$ is linear, 
+   * then this LPV approximation is **linear**.
 
 
 # Numerical Example
@@ -321,6 +186,50 @@ The limit cycle:
 
 :::
 
+# Outlook
+
+Application in nonlinear controller design
+
+---
+
+For an LPV system
+\begin{equation*}
+\dot x = A(\rho)\, x + Bu,
+\end{equation*}
+controller design by *gain scheduling* bases on 
+
+. . .
+
+ 1. identification of salient parameter configurations $\rho^{(k)}$ (*working points*) 
+
+ 1. detection of distances $d(\rho, \rho^{(k)})$ of the current configuration $\rho$
+
+ 1. interpolation of controllers designed for the *working points*
+
+. . .
+
+::: {style="position: absolute; width: 90%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 40px; text-align: left;"}
+
+For an LPV representation of the Navier-Stokes equations this 
+
+* can only be realized 
+* by clustering
+* in the, hopefully, very low-dimensional parametrization
+
+:::
+
+
+## {data-background-image="pics/dlppt-cs3.svg" data-background-size="100%"}
+
+. . .
+
+::: {style="position: absolute; width: 60%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 30px; text-align: left;"}
+
+![Phase portrait and clustering of the first two principal components of $\rho$](pics/rho2d_dist.png)
+
+:::
+
+
 # Conclusion
 
 ## ... and Outlook
@@ -338,3 +247,5 @@ The limit cycle:
 . . .
 
 Thank You!
+
+---
