@@ -104,6 +104,115 @@ with some $A\colon \mathbb R^{n} \to \mathbb R^{n\times n}$.
    * then this LPV approximation is **linear**.
 
 
+# Low-dimensional LPV for NSE
+
+**LPV Approximation** of *Navier-Stokes Equations* by *POD* and *Convolutional Neural Networks*
+
+---
+
+
+## {data-background-image="pics/cw-Re60-t161-cm-bbw.png" data-background-size="cover"}
+
+. . .
+
+::: {style="position: absolute; width: 60%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 40px; text-align: left;"}
+The *Navier-Stokes* equations
+
+$$
+\dot v + (v\cdot \nabla) v- \frac{1}{\mathsf{Re}}\Delta v + \nabla p= f, 
+$$
+
+$$
+\nabla \cdot v = 0.
+$$
+:::
+
+---
+
+* Let $v$ be the velocity solution and let
+$$
+V =
+\begin{bmatrix}
+V_1 & V_2 & \dotsm & V_r
+\end{bmatrix}
+$$
+be a, say, *POD* basis with $$v(t)=\tilde v(t) \approx VV^Tv(t),$$
+
+* then $$\rho(v(t)) = V^Tv(t)$$ is a parametrization.
+
+---
+
+* And with $$\tilde v = VV^Tv = V\rho = \sum_{i=1}^rV_i\rho_i,$$
+
+* the NSE has the low-dimensional LPV representation via
+$$
+(v\cdot \nabla) v \approx (\tilde v \cdot \nabla) v = [\sum_{i=1}^r\rho_i(V_i\cdot \nabla)]\,v.
+$$
+
+## Question
+
+Can we do better than POD?
+
+## {data-background-image="pics/scrsho-lee-cb.png"}
+
+. . .
+
+::: {style="position: absolute; width: 60%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 40px; text-align: left;"}
+
+Lee/Carlberg (2019): *MOR of dynamical systems on nonlinear manifolds using deep convolutional autoencoders*
+:::
+
+## {data-background-image="pics/scrsho-choi.png"}
+
+. . .
+
+::: {style="position: absolute; width: 60%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 40px; text-align: left;"}
+
+Kim/Choi/Widemann/Zodi (2020): *Efficient nonlinear manifold reduced order model*
+:::
+
+## Convolution Autoencoders for NSE
+
+1. Consider solution snapshots $v(t_k)$ as pictures.
+
+2. Learn convolutional kernels to extract relevant features.
+
+3. While extracting the features, we reduce the dimensions.
+
+4. Encode $v(t_k)$ in a low-dimensional $\rho_k$.
+
+## Our Example Architecture Implementation
+
+
+## {data-background-image="pics/nse-cnn.jpg"}
+
+. . .
+
+::: {style="position: absolute; width: 60%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 40px; text-align: left;"}
+
+ * A number of convolutional layers for feature extraction and reduction
+
+ * A full linear layer with nonlinear activation for the final encoding $\rho\in \mathbb R^{r}$
+
+ * A linear layer (w/o activation) that expands $\rho \to \tilde \rho\in \mathbb R^{k}$.
+
+ * And $\tilde \rho$ is used as "parametrized POD coordinates"
+
+:::
+
+## Training for minimizing:
+$$
+\| v_i - VW\rho(v_i)\|^2_M + 
+\| (v_i\cdot \nabla)v_i - (VW\rho_i \cdot \nabla )v_i\|^2_{M^{-1}}
+$$
+which includes
+
+ 1. the POD modes $V\in \mathbb R^{n\times k}$,
+
+ 2. a learned weight matrix $W\in \mathbb R^{k\times r}\colon \rho \mapsto \tilde \rho$,
+
+ 3. the mass matrix $M$ (and it's inverse) of the FEM discretization.
+
 # Numerical Example
 
 
