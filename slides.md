@@ -1,8 +1,8 @@
 ---
 author: 
  - Jan Heiland & Peter Benner (MPI Magdeburg)
-title: Very LD parametrizations of fluid flow for nonlinear controller design
-subtitle: ORCOS -- Vienna -- July 2022
+title: Low-dimensional linear parameter varying system approximations for nonlinear controller design
+subtitle: Blacksburg -- May 2023
 title-slide-attributes:
     data-background-image: pics/mpi-bridge.gif
 parallaxBackgroundImage: pics/csc-en.svg
@@ -50,29 +50,85 @@ A general approach would include
 
  * powerful backends (linear algebra / optimization)
  * exploitation of general structures
+ * MOR
  * data-driven surrogate models
  * all of it?!
 
 
 # LPV Representation
 
-$$
-\dot x = f(x) \quad = A(x)\,x \approx [A_0+\Sigma \,\rho_k(x)A_k]\, x
-$$
+\begin{align}
+\dot x & = f(x) + Bu \\
+       & \approx [A_0+\rho_1(x)A_1+ \dotsm + \rho_r(x) A_r]\, x + Bu
+\end{align}
 
 ---
 
 The *linear parameter varying* (LPV) representation/approximation
 $$
-\dot x \approx  \bigl [\Sigma \,\rho_i(x)A_i\bigr]\, x
+\dot x \approx  \bigl [\Sigma \,\rho_i(x)A_i \bigr]\, x + Bu
 $$
-with **affine parameter dependency** can be exploited for designing nonlinear controller through scheduling.
+for nonlinear controller calls on
 
-However, the dimension of $\rho$ should be very small.
+ * a general structure (linear(!) but parameter-varying)
+ * model order reduction (to reduce the parameter dimension)
+
+and on extensive theory
+
+ 1. LPV controller design
+ 2. series expansions of state-dependent Riccati equations
 
 ---
 
-## How to Design an LPV approximation
+## LPV system approaches
+
+For linear parameter-varying systems
+$$
+\dot x = A(\rho(x))\,x + Bu
+$$
+there exist established methods that provide control laws based one
+
+ * robustness against parameter variations (REFREF)
+ * adaption with the parameter (*gain scheduling*, ApKetal)
+
+A major issue: require solutions of coupled LMI systems.
+
+---
+
+## SDRE series expansion
+
+Consider the optimal control problem
+
+$$
+\int_0^\infty y^Ty + \alpha u^Tu ds
+$$
+subject to 
+$$
+\dot x = A(\rho(x))\,x+Bu, \quad y=Cx.
+$$
+
+---
+
+**Theorem**
+
+If there exists $\Pi$ as a function of $x$ such that
+$$
+\begin{aligned}
+& \dot{\Pi}(x)+\bigl[\frac{\partial(A(x))}{\partial x}\bigr]^T \Pi(x)\\
+& \quad+\Pi(x) A(x)+A^T(x) \Pi(x)-\frac{1}{\alpha} \Pi(x) BB^T \Pi(x)+C^TC=0 .
+\end{aligned}
+$$
+
+Then $u=-\frac{1}{\alpha}B^T\Pi(x)\,x$ is an optimal feedback for the control problem.
+
+**Praxis**
+We use $\Pi(x)$ that solely solves the SDRE
+$$
+\Pi(x) A(x)+A^T(x) \Pi(x)-\frac{1}{\alpha} \Pi(x) BB^T\Pi(x)+C^TC=0,
+$$
+to compute the feedback.
+
+# How to Design an LPV approximation
 
  * Under mild conditions, the flow $f(x)$ can be factorized
 $$
