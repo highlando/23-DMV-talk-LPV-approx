@@ -93,9 +93,10 @@ there exist established methods that provide control laws based one
 
 A major issue: require solutions of coupled LMI systems.
 
----
 
-## SDRE series expansion
+# SDRE series expansion
+
+. . .
 
 Consider the optimal control problem
 
@@ -121,44 +122,252 @@ $$
 
 Then $u=-\frac{1}{\alpha}B^T\Pi(x)\,x$ is an optimal feedback for the control problem.
 
+---
+
 **Praxis**
-We use $\Pi(x)$ that solely solves the SDRE
+Parts of the HJB are discarded and we use $\Pi(x)$ that solely solves the state-dependent Riccati equation (SDRE)
 $$
 \Pi(x) A(x)+A^T(x) \Pi(x)-\frac{1}{\alpha} \Pi(x) BB^T\Pi(x)+C^TC=0,
 $$
-to compute the feedback.
-
-# How to Design an LPV approximation
-
- * Under mild conditions, the flow $f(x)$ can be factorized
+and the SDRE feedback
 $$
-\dot x = [A(x)]\,x
-$$ 
-with some $A\colon \mathbb R^{n} \to \mathbb R^{n\times n}$.
+u=-\frac{1}{\alpha}B^T\Pi(x)\,x.
+$$
 
- * Trivially, this is an LPV representation with $\rho(x) = x$.
+* numerous application examples [refrefref]
+* proofs of performance []
+* also beyond smallness conditions [BenH]
+
+## The series expansion
+
+We note that $\Pi$ depends on $x$ through $A(\rho(x))$. 
+
+Thus, we can consider $\Pi$ as a function in $\rho$ and its corresponding multivariate Taylor expansion
+
+* $\alpha=(\alpha_1, \dotsc, \alpha_r)$ is a multiindex and
+* $\Pi_{(\alpha)}$ are **constant** matrices
 
 ---
 
- * Any MOR scheme that compresses ($\mathcal P$) the state and lifts ($\mathcal L$) it back
+If we insert the Taylor expansion of $\Pi$ and the LPV representation of $A$:
+
+by *matching the coefficients*, we obtain equations for the matrices of, say, the first order approximation
+
+---
+
+Thus, the first-order approximation (in $\rho$) is obtained as
+
+where $P_0$ solves 
+
+and $L_k$ solve 
+
+for $k=1,\dotsc,r$.
+
+...
+
+And the nonlinear feedback is realized as
+$$
+u = -\frac{1}{\alpha}B^T[P_0 + \sum_{i=k}^r \rho_k(x) L_k]\,x
+$$
+
+# How to Design an LPV approximation
+
+A general procedure
+
+---
+
+If $f(0)=0$ and under mild conditions, the flow $f$ can be factorized
+$$
+f( x) = [A(x)]\,x
+$$ 
+with some $A\colon \mathbb R^{n} \to \mathbb R^{n\times n}$.
+
+. . .
+
+1. If $f$ has a strongly continuous Jacobian $\partial f$, then
+$$
+f(x) = [\int_0^1 \partial f(sx)\mathsf{d} s]\, x
+$$
+2. The trivial choice of
+$$
+f(x) = [\frac{1}{x^Tx}f(x)x^T]\,x
+$$
+doesn't work well (neither do the improvements [Charles]).
+
+
+---
+
+For the factorization $f(x)=A(x)\,x$, one can say that
+
+1. it is not unique
+2. it can be a design parameter
+3. often, it is indicated by the structure.
+
+. . .
+
+... like in the advective term in the *Navier-Stokes* equations:
+$$
+(v\cdot \nabla)v = \mathcal A_s(v)\,v
+$$
+with $s\in[0,1]$ and the linear operator $\mathcal A_s(v)$ defined via 
+$$\mathcal A_s(v)\,w := s\,(v\cdot \nabla)w + (1-s)\, (w\cdot \nabla)v.$$
+
+---
+
+## $\dot x = A(x)\,x + Bu$
+
+ * Trivially, this is a (quasi) LPV representation 
+ $$
+ \dot x = A(\rho(x))\, x + Bu
+ $$
+ with $\rho(x) = x$.
+
+ * Take any MOR scheme that compresses (via $\mathcal P$) the state and lifts it back (via $\mathcal L$) so that
  $$
  \tilde x = \mathcal L(\hat x) = \mathcal L (\mathcal P(x)) \approx x
  $$
 
 . . .
 
- * gives a low-dimensional LPV approximation by means of $\rho = \mathcal P(x)$ and
+ * Then $\rho = \mathcal P(x)$ gives a low-dimensional LPV approximation by means of
  $$
- \dot x = A(x)\,x \approx A(\tilde x)\, x = A(\mathcal L \rho (x))\,x.
+ A(x)\,x \approx A(\tilde x)\, x = A(\mathcal L \rho (x))\,x.
  $$
+
+---
+
+## Observation
+
+   * If $x\mapsto A(x)$ itself is affine linear 
+   * and $\mathcal L$ is linear, 
+   * then
+   $$
+   \dot x \approx A(\mathcal L \rho(x))\,x + Bu = [A_0 + \sum_{i=1}^r \rho_i(x) A_i]\, x + Bu
+   $$
+   is affine with 
+
+     * $\rho_i(x)$ being the components of $\rho(x)\in \mathbb R^r$ 
+     * and constant matrices $A_0$, $A_1$, ..., $A_r \in \mathbb R^{n\times n}$.
+
+
+# Numerical Realization
+
+## {data-background-image="pics/cw-Re60-t161-cm-bbw.png" data-background-size="cover"}
 
 . . .
 
- * **Observation**: 
-   * If $x\mapsto A(x)$ is linear 
-   * and $\mathcal L$ is linear, 
-   * then this LPV approximation is **linear**.
+::: {style="position: absolute; width: 60%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 40px; text-align: left;"}
+The *Navier-Stokes* equations
 
+$$
+\dot v + (v\cdot \nabla) v- \frac{1}{\mathsf{Re}}\Delta v + \nabla p= f, 
+$$
+
+$$
+\nabla \cdot v = 0.
+$$
+:::
+
+---
+
+## {data-background-image="pics/cw-Re60-t161-cm-bbw.png" data-background-size="cover"}
+
+::: {style="position: absolute; width: 60%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 40px; text-align: left;"}
+Control Problem:
+
+ * use two small outlets for fluid at the cylinder boundary
+ * to stabilize the unstable steady state
+ * with a few point observations in the wake.
+
+:::
+
+---
+
+## {data-background-image="pics/cw-Re60-t161-cm-bbw.png" data-background-size="cover"}
+
+::: {style="position: absolute; width: 60%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 40px; text-align: left;"}
+Simulation model:
+
+ * we use *finite elements* to obtain
+ * the dynamical model of type
+
+ $\dot x = Ax + N(x,x) + Bu, \quad y = Cx$
+
+ * with $N$ being bilinear in $x$
+ * and a state dimension of about $n=50'000$.
+
+:::
+
+---
+
+## The Algorithm
+
+Nonlinear controller design for 
+$$
+\dot x = f(x) + Bu
+$$
+by LPV approximations and truncated SDRE expansions.
+
+. . .
+
+1. Compute an affine LPV approximative model with 
+$$f(x)=[\sum_{k=0}^r \rho_k(x)A_k]\,x.$$
+
+2. Solve one *Riccati* and $r$ *Lyapunov* equations for $P_0$ and the $L_k$s.
+3. Close the loop with $u = -\frac{1}{\alpha}B^T[P_0 + \sum_{k=1}^r \rho_k(x) L_k]\,x.$
+
+## 1 Compute the LPV Approximation
+
+We use POD coordinates with the matrix $V\in \mathbb R^{n\times r}$ of POD modes $v_k$
+
+ * $\rho(x) = V^T x$, 
+
+ * $\tilde x = V\rho(x)=\sum_{k=1}^r\rho_i(x)v_k.$
+
+. . .
+
+Then:
+$$N(x,x)\approx N(\tilde x, x) = N(\sum_{k=1}^r\rho_i(x)v_k, x) = \sum_{k=1}^r\rho_i(x) N(v_k, x) $$
+which is readily realized as
+$$ [\sum_{k=1}^r\rho_i(x) A_k]\,x.$$
+
+## 2 Compute $P_0$ and the $L_k$s
+
+This requires the solve of large-scale ($n=50'000$) matrix equations
+
+1. Riccati -- nonlinear but fairly standard
+2. Lyapunovs -- linear but indefinite.
+
+We use state-of-the-art low-rank ADI iterations (ask Steffen for details).
+
+
+---
+
+## {data-background-image="pics/cw-v-Re60-stst-cm-bbw.png" data-background-size="cover"}
+
+**3 Close the Loop**
+
+# Conclusion
+
+## ... and Outlook
+
+ * LPV with affine-linear dependencies are attractive if only $k$ is small.
+
+ * CNNs can provide such very low dimensional LPV approximations 
+
+ * and clearly outperform POD (at very low dimensions).
+
+ * Lots of potential left for further improvement.
+
+ * Outlook: Use for nonlinear controller design.
+
+. . .
+
+Thank You!
+
+---
+
+<!--
 
 # Low-dimensional LPV for NSE
 
@@ -393,24 +602,4 @@ For an LPV representation of the Navier-Stokes equations this
 ![Phase portrait and clustering of the first two principal components of $\rho$](pics/rho2d_dist.png)
 
 :::
-
-
-# Conclusion
-
-## ... and Outlook
-
- * LPV with affine-linear dependencies are attractive if only $k$ is small.
-
- * CNNs can provide such very low dimensional LPV approximations 
-
- * and clearly outperform POD (at very low dimensions).
-
- * Lots of potential left for further improvement.
-
- * Outlook: Use for nonlinear controller design.
-
-. . .
-
-Thank You!
-
----
+-->
