@@ -1,7 +1,7 @@
 ---
 author: 
- - Jan Heiland & Peter Benner (MPI Magdeburg)
-title: Low-dimensional linear parameter varying system approximations for nonlinear controller design
+ - Jan Heiland & Peter Benner & Steffen Werner (MPI Magdeburg)
+title: Low-dimensional LPV approximations for nonlinear control
 subtitle: Blacksburg -- May 2023
 title-slide-attributes:
     data-background-image: pics/mpi-bridge.gif
@@ -50,7 +50,7 @@ A general approach would include
 
  * powerful backends (linear algebra / optimization)
  * exploitation of general structures
- * MOR
+ * model order reduction
  * data-driven surrogate models
  * all of it?!
 
@@ -58,8 +58,8 @@ A general approach would include
 # LPV Representation
 
 \begin{align}
-\dot x & = f(x) + Bu \\
-       & \approx [A_0+\rho_1(x)A_1+ \dotsm + \rho_r(x) A_r]\, x + Bu
+\dot x -Bu & = f(x) \\
+       & \approx [A_0+\rho_1(x)A_1+ \dotsm + \rho_r(x) A_r]\, x
 \end{align}
 
 ---
@@ -68,15 +68,19 @@ The *linear parameter varying* (LPV) representation/approximation
 $$
 \dot x \approx  \bigl [\Sigma \,\rho_i(x)A_i \bigr]\, x + Bu
 $$
-for nonlinear controller calls on
+for nonlinear controller comes with
 
- * a general structure (linear(!) but parameter-varying)
- * model order reduction (to reduce the parameter dimension)
+ * a general structure (**linear** but parameter-varying)
 
-and on extensive theory
+and extensive theory on
 
- 1. LPV controller design
- 2. series expansions of state-dependent Riccati equations
+ * LPV controller design
+
+. . .
+
+Spoiler: 
+
+ In this talk, we will consider LPV series expansions of control laws.
 
 ---
 
@@ -88,8 +92,8 @@ $$
 $$
 there exist established methods that provide control laws based one
 
- * robustness against parameter variations (REFREF)
- * adaption with the parameter (*gain scheduling*, ApKetal)
+ * robustness against parameter variations [@PeaA01]
+ * adaption with the parameter, i.e. *gain scheduling*, [@ApkGB95]
 
 A major issue: require solutions of coupled LMI systems.
 
@@ -98,10 +102,10 @@ A major issue: require solutions of coupled LMI systems.
 
 . . .
 
-Consider the optimal control problem
+Consider the optimal regulator control problem
 
 $$
-\int_0^\infty y^Ty + \alpha u^Tu ds
+\int_0^\infty \|y\|^2 + \alpha \|u\|^2\, \mathsf{d}s \to \min_{(y, u)}
 $$
 subject to 
 $$
@@ -110,65 +114,113 @@ $$
 
 ---
 
-**Theorem**
+**Theorem** [@BeeTB00]
 
 If there exists $\Pi$ as a function of $x$ such that
 $$
 \begin{aligned}
-& \dot{\Pi}(x)+\bigl[\frac{\partial(A(x))}{\partial x}\bigr]^T \Pi(x)\\
-& \quad+\Pi(x) A(x)+A^T(x) \Pi(x)-\frac{1}{\alpha} \Pi(x) BB^T \Pi(x)+C^TC=0 .
+& \dot{\Pi}(x)+\bigl[\frac{\partial(A(\rho(x)))}{\partial x}\bigr]^T \Pi(x)\\
+& \quad+\Pi(x) A(\rho(x))+A^T(\rho(x)) \Pi(x)-\frac{1}{\alpha} \Pi(x) BB^T \Pi(x)=-C^TC .
 \end{aligned}
 $$
 
-Then $u=-\frac{1}{\alpha}B^T\Pi(x)\,x$ is an optimal feedback for the control problem.
+Then $$u=-\frac{1}{\alpha}B^T\Pi(x)\,x$$ is an optimal feedback for the control problem.
 
 ---
 
-**Praxis**
-Parts of the HJB are discarded and we use $\Pi(x)$ that solely solves the state-dependent Riccati equation (SDRE)
+In **Praxis**, parts of the HJB are discarded and we use $\Pi(x)$ that solely solves the state-dependent Riccati equation (SDRE)
 $$
-\Pi(x) A(x)+A^T(x) \Pi(x)-\frac{1}{\alpha} \Pi(x) BB^T\Pi(x)+C^TC=0,
+\Pi(x) A(\rho(x))+A^T(\rho(x)) \Pi(x)-\frac{1}{\alpha} \Pi(x) BB^T\Pi(x)=-C^TC,
 $$
 and the SDRE feedback
 $$
 u=-\frac{1}{\alpha}B^T\Pi(x)\,x.
 $$
 
-* numerous application examples [refrefref]
-* proofs of performance []
-* also beyond smallness conditions [BenH]
+* numerous application examples and
+* proofs of performance [@BanLT07]
+* also beyond smallness conditions [@BenH18]
+
+---
+
+* Although the SDRE is an approximation already,
+
+* the repeated solve of the Riccati equation is not feasible.
+
+---
+
+* However, for affine LPV systems, a series expansion 
+
+* enables an efficient approximation at runtime.
+
+
+
+
+---
 
 ## The series expansion
 
 We note that $\Pi$ depends on $x$ through $A(\rho(x))$. 
 
-Thus, we can consider $\Pi$ as a function in $\rho$ and its corresponding multivariate Taylor expansion
+Thus, we can consider $\Pi$ as a function in $\rho$ and its corresponding multivariate Taylor expansion up to order $K$
+\begin{equation} \label{eq:taylor-expansion-P}
+  \Pi (\rho) \approx \Pi (0) + \sum_{1\leq |\beta| \leq K} 
+    \rho^{(\beta)}P_{\beta},
+\end{equation}
+where
 
-* $\alpha=(\alpha_1, \dotsc, \alpha_r)$ is a multiindex and
-* $\Pi_{(\alpha)}$ are **constant** matrices
+* $\beta=(\beta_1, \dotsc, \beta_r)\in \mathbb N^r$ is a multiindex and the
+* $P_{\beta}\in \mathbb R^{n\times n}$ are **constant** matrices.
 
 ---
 
-If we insert the Taylor expansion of $\Pi$ and the LPV representation of $A$:
+**Theorem** 
 
-by *matching the coefficients*, we obtain equations for the matrices of, say, the first order approximation
+If $A(\rho)$ is affine, i.e. $A(\rho) = A_0 + \sum_{k=1}^r \rho_k A_k$.
+
+. . .
+
+Then the coefficients of the first order Taylor approximation
+  $$
+  \Pi (\rho) \approx \Pi(0) + \sum_{|\beta| = 1}  \rho^{(\beta)}P_{\beta} =: P_0 +
+  \sum_{k=1}^r \rho_k L_k.
+  $$
+are the solutions to
+
+* $A_{0}^{T} P_{0} + P_{0} A_{0} - P_{0} B B^{T} P_{0} = -C^{T} C$,
+
+and, for $k=1,\dotsc,r$,
+
+* $(A_{0} - B B^{T} P_{0})^{T} L_{k} + L_{k} ( A_{0} - B B^{T} P_{0} )= -(A_{k}^{T} P_{0} + P_{0} A_{k})$.
+
 
 ---
 
-Thus, the first-order approximation (in $\rho$) is obtained as
+**Proof**
 
-where $P_0$ solves 
+Insert the Taylor expansion of $\Pi$ and the LPV representation of $A$ into the SDRE and *match the coefficients*. 
 
-and $L_k$ solve 
+**Corollary**
 
-for $k=1,\dotsc,r$.
-
-...
-
-And the nonlinear feedback is realized as
+The corresponding nonlinear feedback is realized as
 $$
-u = -\frac{1}{\alpha}B^T[P_0 + \sum_{i=k}^r \rho_k(x) L_k]\,x
+u = -\frac{1}{\alpha}B^T[P_0 + \sum_{k=1}^r \rho_k(x) L_k]\,x.
 $$
+
+. . .
+
+Cp., e.g.,  [@BeeTB00] and [@AllKS23].
+
+
+## Intermediate Summary
+
+A representation/approximation of the nonlinear system via
+$$
+\dot x = [A_0 + \sum_{k=1}^r A_k]\, x + Bu
+$$
+enables the nonlinear feedback design through truncated expansions of the SDRE.
+
+
 
 # How to Design an LPV approximation
 
@@ -192,7 +244,7 @@ $$
 $$
 f(x) = [\frac{1}{x^Tx}f(x)x^T]\,x
 $$
-doesn't work well (neither do the improvements [Charles]).
+doesn't work well -- neither do the improvements [@LinVL15].
 
 
 ---
@@ -214,15 +266,26 @@ $$\mathcal A_s(v)\,w := s\,(v\cdot \nabla)w + (1-s)\, (w\cdot \nabla)v.$$
 
 ---
 
+Now, we have an *state-dependent coefficient* representation
+
+$$ f(x) = A(x)\,x.$$
+
+. . .
+
+## How to obtain an LPV representation/approximation?
+
+
+---
+
 ## $\dot x = A(x)\,x + Bu$
 
- * Trivially, this is a (quasi) LPV representation 
+ * Trivially, this is an LPV representation 
  $$
  \dot x = A(\rho(x))\, x + Bu
  $$
  with $\rho(x) = x$.
 
- * Take any MOR scheme that compresses (via $\mathcal P$) the state and lifts it back (via $\mathcal L$) so that
+ * Take any model order reduction scheme that compresses (via $\mathcal P$) the state and lifts it back (via $\mathcal L$) so that
  $$
  \tilde x = \mathcal L(\hat x) = \mathcal L (\mathcal P(x)) \approx x
  $$
@@ -244,7 +307,7 @@ $$\mathcal A_s(v)\,w := s\,(v\cdot \nabla)w + (1-s)\, (w\cdot \nabla)v.$$
    $$
    \dot x \approx A(\mathcal L \rho(x))\,x + Bu = [A_0 + \sum_{i=1}^r \rho_i(x) A_i]\, x + Bu
    $$
-   is affine with 
+   is **affine** with 
 
      * $\rho_i(x)$ being the components of $\rho(x)\in \mathbb R^r$ 
      * and constant matrices $A_0$, $A_1$, ..., $A_r \in \mathbb R^{n\times n}$.
@@ -311,12 +374,12 @@ by LPV approximations and truncated SDRE expansions.
 . . .
 
 1. Compute an affine LPV approximative model with 
-$$f(x)=[\sum_{k=0}^r \rho_k(x)A_k]\,x.$$
+$$f(x)\approx A_0x +  \sum_{k=1}^r \rho_k(x)A_kx.$$
 
 2. Solve one *Riccati* and $r$ *Lyapunov* equations for $P_0$ and the $L_k$s.
-3. Close the loop with $u = -\frac{1}{\alpha}B^T[P_0 + \sum_{k=1}^r \rho_k(x) L_k]\,x.$
+3. Close the loop with $u = -\frac{1}{\alpha}B^T[P_0x + \sum_{k=1}^r \rho_k(x) L_kx ].$
 
-## 1 Compute the LPV Approximation
+## Step-1 -- Compute the LPV Approximation
 
 We use POD coordinates with the matrix $V\in \mathbb R^{n\times r}$ of POD modes $v_k$
 
@@ -331,9 +394,9 @@ $$N(x,x)\approx N(\tilde x, x) = N(\sum_{k=1}^r\rho_i(x)v_k, x) = \sum_{k=1}^r\r
 which is readily realized as
 $$ [\sum_{k=1}^r\rho_i(x) A_k]\,x.$$
 
-## 2 Compute $P_0$ and the $L_k$s
+## Step-2 -- Compute $P_0$ and the $L_k$s
 
-This requires the solve of large-scale ($n=50'000$) matrix equations
+This requires solutions of large-scale ($n=50'000$) matrix equations
 
 1. Riccati -- nonlinear but fairly standard
 2. Lyapunovs -- linear but indefinite.
@@ -343,23 +406,126 @@ We use state-of-the-art low-rank ADI iterations (ask Steffen for details).
 
 ---
 
-## {data-background-image="pics/cw-v-Re60-stst-cm-bbw.png" data-background-size="cover"}
+## Step-3 -- Close the Loop {data-background-image="pics/cw-v-Re60-stst-cm-bbw.png" data-background-size="cover"}
 
-**3 Close the Loop**
+
+---
+
+* Setup: Start from the steady-state
+* Goal: Stabilize the steady-state
+
+Comparison of feedback designs
+
+ * `LQR` -- plain LQR controller
+ * `xSDRE-r` -- truncated (at `r`) SDRE feedback
+
+
+
+---
+
+## Parameters of the Control Setup
+
+We check the performance with respect to two parameters
+
+ * $\alpha$ ... the regularization parameter that penalizes the control
+
+ * $t_{\mathsf c} > 0$ ... time before the controller is activated 
+
+. . .
+
+...
+
+ * The parameter $t_c$ describes the domain of attraction.
+
+ * For `r=0` the `xSDRE-r` feedback recovers the `LQR` feedback.
+
+
+<!-- \in \{10^{p} \colon p = -2, -1, 0, 1, 2, 3\}
+span in which the controller is idle and a test signal is applied to trigger the instabilities
+-->
+
+---
+
+## {data-background-image="pics/Re60-sut1250-fbs-lqg1e+03.png" data-background-size="cover"}
+
+. . .
+
+::: {style="position: absolute; width: 60%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 40px; text-align: left;"}
+
+Norm plot of the feedback signals.
+
+* `LQR` fails to stabilize
+* increasing `r` means better performance
+* stability achieved at `r=10`
+
+:::
+
+---
+
+## {data-background-image="pics/Re60-sut6500-fbs-lqg1e+00.png" data-background-size="cover"}
+
+. . .
+
+::: {style="position: absolute; width: 60%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 40px; text-align: left;"}
+
+Less regularization 
+
+* less smooth feedback actions
+* again `LQR` fails
+* `xSDRE` can achieve stability
+* stability achieved for certain `r`
+
+:::
+
+---
+
+## The Full Picture{data-background-image="pics/parametermap.png" data-background-size="contain"}
+
+--- 
+
+## {data-background-image="pics/parametermap.png" data-background-size="contain"}
+
+
+---
+
+## Conclusion for the Numerical Results
+
+* Measurable and reliable improvements with respect to $\alpha$
+
+  * *more performant feedback action at higher regularization*
+
+. . .
+
+* no measurable performance gain with respect to $t_{\mathsf c}$
+
+  * *no extension of the domain of attraction*
+
+. . .
+
+* still much space for improvement
+
+  * find better bases for the parametrization?
+  * increase the `r`?
+  * second order truncation of the SDRE?
+
 
 # Conclusion
 
 ## ... and Outlook
 
- * LPV with affine-linear dependencies are attractive if only $k$ is small.
+ * General approach to model **structure** reduction by low-dimensional affine LPV systems.
 
- * CNNs can provide such very low dimensional LPV approximations 
+ $$f(x) \quad \to\quad  A(x)\,x\quad  \to\quad  \tilde A(\rho(x))\,x\quad  \to\quad  [A_0 + \sum_{k=1}^r\rho_k(x)A_k]\,x$$
 
- * and clearly outperform POD (at very low dimensions).
+ * Proof of concept for nonlinear controller design with POD and truncated SDRE [@HeiW23].
 
- * Lots of potential left for further improvement.
+ * General and performant but still heuristic approach.
 
- * Outlook: Use for nonlinear controller design.
+. . .
+
+* Detailed roadmap for developing the LPV (systems) theory is available.
+
+* PhD student wanted!
 
 . . .
 
@@ -367,239 +533,4 @@ Thank You!
 
 ---
 
-<!--
-
-# Low-dimensional LPV for NSE
-
-**LPV Approximation** of *Navier-Stokes Equations* by *POD* and *Convolutional Neural Networks*
-
----
-
-
-## {data-background-image="pics/cw-Re60-t161-cm-bbw.png" data-background-size="cover"}
-
-. . .
-
-::: {style="position: absolute; width: 60%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 40px; text-align: left;"}
-The *Navier-Stokes* equations
-
-$$
-\dot v + (v\cdot \nabla) v- \frac{1}{\mathsf{Re}}\Delta v + \nabla p= f, 
-$$
-
-$$
-\nabla \cdot v = 0.
-$$
-:::
-
----
-
-* Let $v$ be the velocity solution and let
-$$
-V =
-\begin{bmatrix}
-V_1 & V_2 & \dotsm & V_r
-\end{bmatrix}
-$$
-be a, say, *POD* basis with $$v(t)=\tilde v(t) \approx VV^Tv(t),$$
-
-* then $$\rho(v(t)) = V^Tv(t)$$ is a parametrization.
-
----
-
-* And with $$\tilde v = VV^Tv = V\rho = \sum_{i=1}^rV_i\rho_i,$$
-
-* the NSE has the low-dimensional LPV representation via
-$$
-(v\cdot \nabla) v \approx (\tilde v \cdot \nabla) v = [\sum_{i=1}^r\rho_i(V_i\cdot \nabla)]\,v.
-$$
-
-## Question
-
-Can we do better than POD?
-
-## {data-background-image="pics/scrsho-lee-cb.png"}
-
-. . .
-
-::: {style="position: absolute; width: 60%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 40px; text-align: left;"}
-
-Lee/Carlberg (2019): *MOR of dynamical systems on nonlinear manifolds using deep convolutional autoencoders*
-:::
-
-## {data-background-image="pics/scrsho-choi.png"}
-
-. . .
-
-::: {style="position: absolute; width: 60%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 40px; text-align: left;"}
-
-Kim/Choi/Widemann/Zodi (2020): *Efficient nonlinear manifold reduced order model*
-:::
-
-## Convolution Autoencoders for NSE
-
-1. Consider solution snapshots $v(t_k)$ as pictures.
-
-2. Learn convolutional kernels to extract relevant features.
-
-3. While extracting the features, we reduce the dimensions.
-
-4. Encode $v(t_k)$ in a low-dimensional $\rho_k$.
-
-## Our Example Architecture Implementation
-
-
-## {data-background-image="pics/nse-cnn.jpg"}
-
-. . .
-
-::: {style="position: absolute; width: 60%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 40px; text-align: left;"}
-
- * A number of convolutional layers for feature extraction and reduction
-
- * A full linear layer with nonlinear activation for the final encoding $\rho\in \mathbb R^{r}$
-
- * A linear layer (w/o activation) that expands $\rho \to \tilde \rho\in \mathbb R^{k}$.
-
- * And $\tilde \rho$ is used as "parametrized POD coordinates"
-
-:::
-
-## Training for minimizing:
-$$
-\| v_i - VW\rho(v_i)\|^2_M + 
-\| (v_i\cdot \nabla)v_i - (VW\rho_i \cdot \nabla )v_i\|^2_{M^{-1}}
-$$
-which includes
-
- 1. the POD modes $V\in \mathbb R^{n\times k}$,
-
- 2. a learned weight matrix $W\in \mathbb R^{k\times r}\colon \rho \mapsto \tilde \rho$,
-
- 3. the mass matrix $M$ (and it's inverse) of the FEM discretization.
-
-# Numerical Example
-
-
-## {data-background-image="pics/example-cnn-design.png"}
-
-. . .
-
-::: {style="position: absolute; width: 60%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 40px; text-align: left;"}
-
- * Example architecture of the CNN encoder/decoder
-
- * Designed and optimized in `pytorch`
-
- * Very many parameters of the design and the optimization -- not yet well explored
-
-:::
-
-## {data-background-image="pics/sc-RE40-dvlpd.png"}
-
-
-. . .
-
-::: {style="position: absolute; width: 60%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 40px; text-align: left;"}
-
-Simulation parameters:
-
- * Cylinder wake at $\mathsf{Re}=40$, time in $[0, 50]$
- * *Taylor-Hood* finite elements with over `60000` degrees of freedom
- * `2000` snapshots/data points on $[0, 8]$ for the POD and CNN
-
-:::
-
-## {data-background-image="pics/Figure_9.svg"}
-
-
-. . .
-
-::: {style="position: absolute; width: 60%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 40px; text-align: left;"}
-
-CNN parameters:
-
- * `2000` data points on the FEM mesh
- * interpolated to a tensor of size `2x63x127`
- * convolutional neural network 
-   * convolutional layers
-     * `kernelsize, stride = 5, 2`
-   * one activated linear layer $\to \rho$
-   * one linear layer $\rho \mapsto \tilde \rho$
-
-:::
-
-## {data-background-image="pics/dlvst-cs3.svg" data-background-size="100%"}
-
-. . .
-
-::: {style="position: absolute; width: 60%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 40px; text-align: left;"}
-
-Simulation parameters:
-
- * The nonlinearity $(v\cdot \nabla)v$ of the NSE is replaced by $$\frac 12 \bigl[(W\rho \cdot \nabla)v +  (v\cdot \nabla)W\rho\bigr]$$
- * with $\rho = \rho (v) \in \mathbb R^{3}$
- * encoded and decoded through
-   * plain POD or
-   * a CNN 
-
-:::
-
-## {data-background-image="pics/dlppt-cs3.svg" data-background-size="100%"}
-
-. . .
-
-::: {style="position: absolute; width: 60%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 40px; text-align: left;"}
-
-The limit cycle:
-
- * We report the drag and lift forces that act on the cylinder
- * and plot their phase portrait.
- * The limit cycle is very well captured by the CNN of `code_size=3`
- * POD approximation far off
-
-:::
-
-# Outlook
-
-Application in nonlinear controller design
-
----
-
-For an LPV system
-\begin{equation*}
-\dot x = A(\rho)\, x + Bu,
-\end{equation*}
-controller design by *gain scheduling* bases on 
-
-. . .
-
- 1. identification of salient parameter configurations $\rho^{(k)}$ (*working points*) 
-
- 1. detection of distances $d(\rho, \rho^{(k)})$ of the current configuration $\rho$
-
- 1. interpolation of controllers designed for the *working points*
-
-. . .
-
-::: {style="position: absolute; width: 90%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 40px; text-align: left;"}
-
-For an LPV representation of the Navier-Stokes equations this 
-
-* can only be realized 
-* by clustering
-* in the, hopefully, very low-dimensional parametrization
-
-:::
-
-
-## {data-background-image="pics/dlppt-cs3.svg" data-background-size="100%"}
-
-. . .
-
-::: {style="position: absolute; width: 60%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 30px; text-align: left;"}
-
-![Phase portrait and clustering of the first two principal components of $\rho$](pics/rho2d_dist.png)
-
-:::
--->
+## References
