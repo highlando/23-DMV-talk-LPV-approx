@@ -216,7 +216,7 @@ Cp., e.g.,  [@BeeTB00] and [@AllKS23].
 
 A representation/approximation of the nonlinear system via
 $$
-\dot x = [A_0 + \sum_{k=1}^r A_k]\, x + Bu
+\dot x = [A_0 + \sum_{k=1}^r \rho_k(x) A_k]\, x + Bu
 $$
 enables the nonlinear feedback design through truncated expansions of the SDRE.
 
@@ -312,6 +312,13 @@ $$ f(x) = A(x)\,x.$$
      * $\rho_i(x)$ being the components of $\rho(x)\in \mathbb R^r$ 
      * and constant matrices $A_0$, $A_1$, ..., $A_r \in \mathbb R^{n\times n}$.
 
+## Intermediate Summary
+
+ * Generally, a nonlinear $f$ can be factorized as $f(x) = A(x)\,x$.
+
+ * Model order reduction provides a low dimensional LPV representation $A(x)\,x\approx A(\mathcal \rho(x))\,x$.
+
+ * The needed affine-linearity in $\rho$ follows from system's structure (or from another layer of approximation (see, e.g, [@KoeT20]).
 
 # Numerical Realization
 
