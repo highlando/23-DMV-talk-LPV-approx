@@ -277,7 +277,7 @@ data-cites="AllKS23">(Alla, Kalise, and Simoncini 2023)</span>.</p>
 <h2>Intermediate Summary</h2>
 <p>A representation/approximation of the nonlinear system via <span
 class="math display">\[
-\dot x = [A_0 + \sum_{k=1}^r A_k]\, x + Bu
+\dot x = [A_0 + \sum_{k=1}^r \rho_k(x) A_k]\, x + Bu
 \]</span> enables the nonlinear feedback design through truncated
 expansions of the SDRE.</p>
 </section></section>
@@ -382,6 +382,21 @@ of <span class="math inline">\(\rho(x)\in \mathbb R^r\)</span></li>
 <span class="math inline">\(A_1\)</span>, …, <span
 class="math inline">\(A_r \in \mathbb R^{n\times n}\)</span>.</li>
 </ul></li>
+</ul>
+</section>
+<section id="intermediate-summary-1" class="slide level2">
+<h2>Intermediate Summary</h2>
+<ul>
+<li><p>Generally, a nonlinear <span class="math inline">\(f\)</span> can
+be factorized as <span class="math inline">\(f(x) =
+A(x)\,x\)</span>.</p></li>
+<li><p>Model order reduction provides a low dimensional LPV
+representation <span class="math inline">\(A(x)\,x\approx A(\mathcal
+\rho(x))\,x\)</span>.</p></li>
+<li><p>The needed affine-linearity in <span
+class="math inline">\(\rho\)</span> follows from system’s structure (or
+from another layer of approximation (see, e.g, <span class="citation"
+data-cites="KoeT20">(Koelewijn and Tóth 2020)</span>).</p></li>
 </ul>
 </section></section>
 <section>
@@ -693,6 +708,13 @@ Heiland, Jan, and Steffen W. R. Werner. 2023. <span>“Low-Complexity
 Linear Parameter-Varying Approximations of Incompressible
 <span>N</span>avier-<span>S</span>tokes Equations for Truncated
 State-Dependent <span>R</span>iccati Feedback.”</span> arxiv.
+</div>
+<div id="ref-KoeT20" class="csl-entry" role="doc-biblioentry">
+Koelewijn, Patrick J. W., and Roland Tóth. 2020. <span>“Scheduling
+Dimension Reduction of <span>LPV</span> Models - <span>A</span> Deep
+Neural Network Approach.”</span> In <em>2020 American Control
+Conference</em>, 1111–17. <span>IEEE</span>. <a
+href="https://doi.org/10.23919/ACC45564.2020.9147310">https://doi.org/10.23919/ACC45564.2020.9147310</a>.
 </div>
 <div id="ref-LeeC20" class="csl-entry" role="doc-biblioentry">
 Lee, Kookjin, and Kevin T. Carlberg. 2020. <span>“Model Reduction of
