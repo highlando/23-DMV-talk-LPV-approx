@@ -532,11 +532,15 @@ Less regularization
 
  * General and performant but still heuristic approach.
 
-. . .
+---
 
 * Detailed roadmap for developing the LPV (systems) theory is available.
 
-* PhD student wanted!
+* Funding by DFG.
+
+* **PhD student wanted**!
+
+* See [www.janheiland.de](www.janheiland.de) an apply by August 3rd
 
 . . .
 
