@@ -9,6 +9,6 @@ git add index.html
 git commit -m 'updated the slides md and now the html'
 LSTCHSH=$(git rev-parse HEAD)
 
-git checkout gh-pages
+git checkout manu-fix-html
 git cherry-pick $LSTCHSH  # merge only the last commit
-git push gh-origin gh-pages
+# git push gh-origin gh-pages
