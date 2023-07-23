@@ -2,7 +2,7 @@
 author: 
  - Jan Heiland & Peter Benner & Steffen Werner (MPI Magdeburg)
 title: Low-dimensional LPV approximations for nonlinear control
-subtitle: Blacksburg -- May 2023
+subtitle: SIAM-CT -- Philadelphia -- July 2023
 title-slide-attributes:
     data-background-image: pics/mpi-bridge.gif
 parallaxBackgroundImage: pics/csc-en.svg
@@ -222,6 +222,7 @@ enables the nonlinear feedback design through truncated expansions of the SDRE.
 
 
 
+<!--
 # How to Design an LPV approximation
 
 A general procedure
@@ -319,6 +320,8 @@ $$ f(x) = A(x)\,x.$$
  * Model order reduction provides a low dimensional LPV representation $A(x)\,x\approx A(\mathcal \rho(x))\,x$.
 
  * The needed affine-linearity in $\rho$ follows from system's structure (or from another layer of approximation (see, e.g, [@KoeT20]).
+
+-->
 
 # Numerical Realization
 
