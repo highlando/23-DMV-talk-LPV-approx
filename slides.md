@@ -212,6 +212,8 @@ $$
 Cp., e.g.,  [@BeeTB00] and [@AllKS23].
 
 
+<!--
+
 ## Intermediate Summary
 
 A representation/approximation of the nonlinear system via
@@ -222,7 +224,6 @@ enables the nonlinear feedback design through truncated expansions of the SDRE.
 
 
 
-<!--
 # How to Design an LPV approximation
 
 A general procedure
