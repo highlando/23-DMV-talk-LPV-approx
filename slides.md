@@ -501,13 +501,7 @@ Less regularization
 
  * Proof of concept for nonlinear controller design with POD and truncated SDRE [@HeiW23].
 
-. . .
-
  * still much space for improvement
-
-   * find better bases for the parametrization?
-   * increase the `r`?
-   * second order truncation of the SDRE?
 
 
 ---
