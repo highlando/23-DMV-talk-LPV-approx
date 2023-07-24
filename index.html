@@ -575,36 +575,6 @@ data-background-image="pics/parametermap.png"
 data-background-size="contain">
 <h2 data-background-image="pics/parametermap.png"
 data-background-size="contain"></h2>
-</section>
-<section id="conclusion-for-the-numerical-results" class="slide level2">
-<h2>Conclusion for the Numerical Results</h2>
-<ul>
-<li><p>Measurable and reliable improvements with respect to <span
-class="math inline">\(\alpha\)</span></p>
-<ul>
-<li><em>more performant feedback action at higher
-regularization</em></li>
-</ul></li>
-</ul>
-<div class="fragment">
-<ul>
-<li><p>no measurable performance gain with respect to <span
-class="math inline">\(t_{\mathsf c}\)</span></p>
-<ul>
-<li><em>no extension of the domain of attraction</em></li>
-</ul></li>
-</ul>
-</div>
-<div class="fragment">
-<ul>
-<li><p>still much space for improvement</p>
-<ul>
-<li>find better bases for the parametrization?</li>
-<li>increase the <code>r</code>?</li>
-<li>second order truncation of the SDRE?</li>
-</ul></li>
-</ul>
-</div>
 </section></section>
 <section>
 <section id="conclusion" class="title-slide slide level1">
@@ -617,15 +587,19 @@ class="math inline">\(t_{\mathsf c}\)</span></p>
 <li>General approach to model <strong>structure</strong> reduction by
 low-dimensional affine LPV systems.</li>
 </ul>
-<p><span class="math display">\[f(x) \quad
-\to\quad  A(x)\,x\quad  \to\quad  \tilde
-A(\rho(x))\,x\quad  \to\quad  [A_0 +
+<p><span class="math display">\[f(x) \quad \to\quad  [A_0 +
 \sum_{k=1}^r\rho_k(x)A_k]\,x\]</span></p>
 <ul>
 <li><p>Proof of concept for nonlinear controller design with POD and
 truncated SDRE <span class="citation" data-cites="HeiW23">(Heiland and
 Werner 2023)</span>.</p></li>
 <li><p>General and performant but still heuristic approach.</p></li>
+<li><p>still much space for improvement</p>
+<ul>
+<li>find better bases for the parametrization?</li>
+<li>increase the <code>r</code>?</li>
+<li>second order truncation of the SDRE?</li>
+</ul></li>
 </ul>
 </section>
 <section class="slide level2">
