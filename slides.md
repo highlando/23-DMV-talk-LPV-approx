@@ -1,6 +1,6 @@
 ---
 author: 
- - Jan Heiland & Peter Benner & Steffen Werner (MPI Magdeburg)
+ - Amritam Das & Jan Heiland & Peter Benner & Steffen Werner (MPI Magdeburg)
 title: Low-dimensional LPV approximations for nonlinear control
 subtitle: SIAM-CT -- Philadelphia -- July 2023
 title-slide-attributes:
