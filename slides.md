@@ -392,18 +392,12 @@ $$f(x)\approx A_0x +  \sum_{k=1}^r \rho_k(x)A_kx.$$
 
 ## Step-1 -- Compute the LPV Approximation
 
-We use POD coordinates with the matrix $V\in \mathbb R^{n\times r}$ of POD modes $v_k$
+We use 
 
- * $\rho(x) = V^T x$, 
+ * POD coordinates $\rho(x) = V_r^Tx$
 
- * $\tilde x = V\rho(x)=\sum_{k=1}^r\rho_i(x)v_k.$
+ * and exploit the bilinear structure of the convection.
 
-. . .
-
-Then:
-$$N(x,x)\approx N(\tilde x, x) = N(\sum_{k=1}^r\rho_i(x)v_k, x) = \sum_{k=1}^r\rho_i(x) N(v_k, x) $$
-which is readily realized as
-$$ [\sum_{k=1}^r\rho_i(x) A_k]\,x.$$
 
 ## Step-2 -- Compute $P_0$ and the $L_k$s
 
