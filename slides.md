@@ -491,23 +491,6 @@ Less regularization
 ## {data-background-image="pics/parametermap.png" data-background-size="contain"}
 
 
----
-
-## Conclusion for the Numerical Results
-
-* Measurable and reliable improvements with respect to $\alpha$
-
-  * *more performant feedback action at higher regularization*
-
-. . .
-
-* no measurable performance gain with respect to $t_{\mathsf c}$
-
-  * *no extension of the domain of attraction*
-
-. . .
-
-
 # Conclusion
 
 ## ... and Outlook
