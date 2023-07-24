@@ -501,7 +501,7 @@ Less regularization
 
  * Proof of concept for nonlinear controller design with POD and truncated SDRE [@HeiW23].
 
- * General and performant but still heuristic approach.
+. . .
 
  * still much space for improvement
 
