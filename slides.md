@@ -491,40 +491,24 @@ Less regularization
 ## {data-background-image="pics/parametermap.png" data-background-size="contain"}
 
 
----
-
-## Conclusion for the Numerical Results
-
-* Measurable and reliable improvements with respect to $\alpha$
-
-  * *more performant feedback action at higher regularization*
-
-. . .
-
-* no measurable performance gain with respect to $t_{\mathsf c}$
-
-  * *no extension of the domain of attraction*
-
-. . .
-
-* still much space for improvement
-
-  * find better bases for the parametrization?
-  * increase the `r`?
-  * second order truncation of the SDRE?
-
-
 # Conclusion
 
 ## ... and Outlook
 
  * General approach to model **structure** reduction by low-dimensional affine LPV systems.
 
- $$f(x) \quad \to\quad  A(x)\,x\quad  \to\quad  \tilde A(\rho(x))\,x\quad  \to\quad  [A_0 + \sum_{k=1}^r\rho_k(x)A_k]\,x$$
+ $$f(x) \quad \to\quad  [A_0 + \sum_{k=1}^r\rho_k(x)A_k]\,x$$
 
  * Proof of concept for nonlinear controller design with POD and truncated SDRE [@HeiW23].
 
  * General and performant but still heuristic approach.
+
+ * still much space for improvement
+
+   * find better bases for the parametrization?
+   * increase the `r`?
+   * second order truncation of the SDRE?
+
 
 ---
 
