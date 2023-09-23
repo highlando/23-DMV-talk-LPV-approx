@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
-  <meta name="author" content="Amritam Das &amp; Jan Heiland &amp; Peter Benner &amp; Steffen Werner (MPI Magdeburg)">
-  <title>Low-dimensional LPV approximations for nonlinear control</title>
+  <meta name="author" content="Jan Heiland &amp; Peter Benner &amp; Steffen Werner (MPI Magdeburg)">
+  <title>Low-complexity systems approximations for nonlinear feedback design</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="reveal.js/dist/reset.css">
-  <link rel="stylesheet" href="reveal.js/dist/reveal.css">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4//dist/reset.css">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4//dist/reveal.css">
   <style>
     .reveal .sourceCode {  /* see #7635 */
       overflow: visible;
@@ -48,18 +48,18 @@
     div.csl-indent {
       margin-left: 2em;
     }  </style>
-  <link rel="stylesheet" href="reveal.js/dist/theme/solarized.css" id="theme">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4//dist/theme/solarized.css" id="theme">
 </head>
 <body>
   <div class="reveal">
     <div class="slides">
 
 <section id="title-slide" data-background-image="pics/mpi-bridge.gif">
-  <h1 class="title">Low-dimensional LPV approximations for nonlinear
-control</h1>
-  <p class="subtitle">SIAM-CT – Philadelphia – July 2023</p>
-  <p class="author">Amritam Das &amp; Jan Heiland &amp; Peter Benner
-&amp; Steffen Werner (MPI Magdeburg)</p>
+  <h1 class="title">Low-complexity systems approximations for nonlinear
+feedback design</h1>
+  <p class="subtitle">DMV – Ilmenau – September 2023</p>
+  <p class="author">Jan Heiland &amp; Peter Benner &amp; Steffen Werner
+(MPI Magdeburg)</p>
 </section>
 
 <section>
@@ -94,18 +94,6 @@ style="position: absolute; width: 60%; right: 0; box-shadow: 0 1px 4px rgba(0,0,
 </ul>
 </div>
 </div>
-</section>
-<section id="control-of-nonlinear-large-scale-systems"
-class="slide level2">
-<h2>Control of Nonlinear &amp; Large-Scale Systems</h2>
-<p>A general approach would include</p>
-<ul>
-<li>powerful backends (linear algebra / optimization)</li>
-<li>exploitation of general structures</li>
-<li>model order reduction</li>
-<li>data-driven surrogate models</li>
-<li>all of it?!</li>
-</ul>
 </section></section>
 <section>
 <section id="lpv-representation" class="title-slide slide level1">
@@ -127,28 +115,15 @@ parameter-varying)</li>
 </ul>
 <p>and extensive theory on</p>
 <ul>
-<li>LPV controller design</li>
-</ul>
-<div class="fragment">
-<p>Spoiler:</p>
-<p>In this talk, we will consider LPV series expansions of control
-laws.</p>
-</div>
-</section>
-<section id="lpv-system-approaches" class="slide level2">
-<h2>LPV system approaches</h2>
-<p>For linear parameter-varying systems <span class="math display">\[
-\dot x = A(\rho(x))\,x + Bu
-\]</span> there exist established methods that provide control laws
-based one</p>
-<ul>
-<li>robustness against parameter variations <span class="citation"
-data-cites="PeaA01">(Peaucelle and Arzelier 2001)</span></li>
-<li>adaption with the parameter, i.e. <em>gain scheduling</em>, <span
+<li>LPV controller design; see, e.g. <span class="citation"
+data-cites="PeaA01">(Peaucelle and Arzelier 2001)</span> and <span
 class="citation" data-cites="ApkGB95">(Apkarian, Gahinet, and Becker
 1995)</span></li>
 </ul>
-<p>A major issue: require solutions of coupled LMI systems.</p>
+<div class="fragment">
+<p>In this talk, we will consider LPV series expansions of control
+laws.</p>
+</div>
 </section></section>
 <section>
 <section id="sdre-series-expansion" class="title-slide slide level1">
@@ -182,8 +157,8 @@ optimal feedback for the control problem.</p>
 </section>
 <section class="slide level2">
 
-<p>In <strong>Praxis</strong>, parts of the HJB are discarded and we use
-<span class="math inline">\(\Pi(x)\)</span> that solely solves the
+<p>In <strong>practice</strong>, parts of the HJB are discarded and we
+use <span class="math inline">\(\Pi(x)\)</span> that solely solves the
 state-dependent Riccati equation (SDRE) <span class="math display">\[
 \Pi(x) A(\rho(x))+A^T(\rho(x)) \Pi(x)-\frac{1}{\alpha} \Pi(x)
 BB^T\Pi(x)=-C^TC,
@@ -318,15 +293,6 @@ For the factorization $f(x)=A(x)\,x$, one can say that
 1. it is not unique
 2. it can be a design parameter
 3. often, it is indicated by the structure.
-
-. . .
-
-... like in the advective term in the *Navier-Stokes* equations:
-$$
-(v\cdot \nabla)v = \mathcal A_s(v)\,v
-$$
-with $s\in[0,1]$ and the linear operator $\mathcal A_s(v)$ defined via 
-$$\mathcal A_s(v)\,w := s\,(v\cdot \nabla)w + (1-s)\, (w\cdot \nabla)v.$$
 
 ---
 
@@ -694,13 +660,13 @@ href="https://doi.org/10.1109/9.917664">https://doi.org/10.1109/9.917664</a>.
     </div>
   </div>
 
-  <script src="reveal.js/dist/reveal.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4//dist/reveal.js"></script>
 
   <!-- reveal.js plugins -->
-  <script src="reveal.js/plugin/notes/notes.js"></script>
-  <script src="reveal.js/plugin/search/search.js"></script>
-  <script src="reveal.js/plugin/zoom/zoom.js"></script>
-  <script src="reveal.js/plugin/math/math.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4//plugin/notes/notes.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4//plugin/search/search.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4//plugin/zoom/zoom.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4//plugin/math/math.js"></script>
 
   <script>
 
