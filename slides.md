@@ -184,8 +184,6 @@ $$
 Cp., e.g.,  [@BeeTB00] and [@AllKS23].
 
 
-<!--
-
 ## Intermediate Summary
 
 A representation/approximation of the nonlinear system via
@@ -285,8 +283,6 @@ $$ f(x) = A(x)\,x.$$
 
  * The needed affine-linearity in $\rho$ follows from system's structure (or from another layer of approximation (see, e.g, [@KoeT20]).
 
--->
-
 # Numerical Realization
 
 ## {data-background-image="pics/cw-Re60-t161-cm-bbw.png" data-background-size="cover"}
@@ -355,12 +351,18 @@ $$f(x)\approx A_0x +  \sum_{k=1}^r \rho_k(x)A_kx.$$
 
 ## Step-1 -- Compute the LPV Approximation
 
-We use 
+We use POD coordinates with the matrix $V\in \mathbb R^{n\times r}$ of POD modes $v_k$
 
- * POD coordinates $\rho(x) = V_r^Tx$
+ * $\rho(x) = V^T x$, 
 
- * and exploit the bilinear structure of the convection.
+ * $\tilde x = V\rho(x)=\sum_{k=1}^r\rho_i(x)v_k.$
 
+. . .
+
+Then:
+$$N(x,x)\approx N(\tilde x, x) = N(\sum_{k=1}^r\rho_i(x)v_k, x) = \sum_{k=1}^r\rho_i(x) N(v_k, x) $$
+which is readily realized as
+$$ [\sum_{k=1}^r\rho_i(x) A_k]\,x.$$
 
 ## Step-2 -- Compute $P_0$ and the $L_k$s
 
@@ -454,28 +456,48 @@ Less regularization
 ## {data-background-image="pics/parametermap.png" data-background-size="contain"}
 
 
+---
+
+## Conclusion for the Numerical Results
+
+* Measurable and reliable improvements with respect to $\alpha$
+
+  * *more performant feedback action at higher regularization*
+
+. . .
+
+* no measurable performance gain with respect to $t_{\mathsf c}$
+
+  * *no extension of the domain of attraction*
+
+. . .
+
+* still much space for improvement
+
+  * find better bases for the parametrization?
+  * increase the `r`?
+  * second order truncation of the SDRE?
+
+
 # Conclusion
 
 ## ... and Outlook
 
  * General approach to model **structure** reduction by low-dimensional affine LPV systems.
 
- $$f(x) \quad \to\quad  [A_0 + \sum_{k=1}^r\rho_k(x)A_k]\,x$$
+ $$f(x) \quad \to\quad  A(x)\,x\quad  \to\quad  \tilde A(\rho(x))\,x\quad  \to\quad  [A_0 + \sum_{k=1}^r\rho_k(x)A_k]\,x$$
 
  * Proof of concept for nonlinear controller design with POD and truncated SDRE [@HeiW23].
 
- * still much space for improvement
+ * General and performant but still heuristic approach.
 
-
----
+. . .
 
 * Detailed roadmap for developing the LPV (systems) theory is available.
 
-* Funding by DFG.
+* PhD student/PostDoc wanted!
 
-* **PhD student wanted**!
-
-* See [www.janheiland.de](www.janheiland.de) an apply by August 3rd
+* Just contact me!
 
 . . .
 
