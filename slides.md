@@ -495,7 +495,9 @@ Less regularization
 
 * Detailed roadmap for developing the LPV (systems) theory is available.
 
-* PhD student wanted!
+* PhD student/PostDoc wanted!
+
+* Just contact me!
 
 . . .
 
