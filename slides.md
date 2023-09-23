@@ -1,8 +1,8 @@
 ---
 author: 
- - Amritam Das & Jan Heiland & Peter Benner & Steffen Werner (MPI Magdeburg)
-title: Low-dimensional LPV approximations for nonlinear control
-subtitle: SIAM-CT -- Philadelphia -- July 2023
+ - Jan Heiland & Peter Benner & Steffen Werner (MPI Magdeburg)
+title: Low-complexity systems approximations for nonlinear feedback design
+subtitle: DMV -- Ilmenau -- September 2023
 title-slide-attributes:
     data-background-image: pics/mpi-bridge.gif
 parallaxBackgroundImage: pics/csc-en.svg
@@ -44,17 +44,6 @@ Stabilization of a laminar flow
 
 :::
 
-## Control of Nonlinear & Large-Scale Systems
-
-A general approach would include
-
- * powerful backends (linear algebra / optimization)
- * exploitation of general structures
- * model order reduction
- * data-driven surrogate models
- * all of it?!
-
-
 # LPV Representation
 
 \begin{align}
@@ -74,28 +63,11 @@ for nonlinear controller comes with
 
 and extensive theory on
 
- * LPV controller design
+ * LPV controller design; see, e.g. [@PeaA01] and [@ApkGB95]
 
 . . .
 
-Spoiler: 
-
  In this talk, we will consider LPV series expansions of control laws.
-
----
-
-## LPV system approaches
-
-For linear parameter-varying systems
-$$
-\dot x = A(\rho(x))\,x + Bu
-$$
-there exist established methods that provide control laws based one
-
- * robustness against parameter variations [@PeaA01]
- * adaption with the parameter, i.e. *gain scheduling*, [@ApkGB95]
-
-A major issue: require solutions of coupled LMI systems.
 
 
 # SDRE series expansion
@@ -128,7 +100,7 @@ Then $$u=-\frac{1}{\alpha}B^T\Pi(x)\,x$$ is an optimal feedback for the control 
 
 ---
 
-In **Praxis**, parts of the HJB are discarded and we use $\Pi(x)$ that solely solves the state-dependent Riccati equation (SDRE)
+In **practice**, parts of the HJB are discarded and we use $\Pi(x)$ that solely solves the state-dependent Riccati equation (SDRE)
 $$
 \Pi(x) A(\rho(x))+A^T(\rho(x)) \Pi(x)-\frac{1}{\alpha} \Pi(x) BB^T\Pi(x)=-C^TC,
 $$
@@ -256,15 +228,6 @@ For the factorization $f(x)=A(x)\,x$, one can say that
 1. it is not unique
 2. it can be a design parameter
 3. often, it is indicated by the structure.
-
-. . .
-
-... like in the advective term in the *Navier-Stokes* equations:
-$$
-(v\cdot \nabla)v = \mathcal A_s(v)\,v
-$$
-with $s\in[0,1]$ and the linear operator $\mathcal A_s(v)$ defined via 
-$$\mathcal A_s(v)\,w := s\,(v\cdot \nabla)w + (1-s)\, (w\cdot \nabla)v.$$
 
 ---
 
