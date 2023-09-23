@@ -249,109 +249,124 @@ u = -\frac{1}{\alpha}B^T[P_0 + \sum_{k=1}^r \rho_k(x) L_k]\,x.
 <p>Cp., e.g., <span class="citation" data-cites="BeeTB00">(Beeler, Tran,
 and Banks 2000)</span> and <span class="citation"
 data-cites="AllKS23">(Alla, Kalise, and Simoncini 2023)</span>.</p>
-<!--
-
-## Intermediate Summary
-
-A representation/approximation of the nonlinear system via
-$$
-\dot x = [A_0 + \sum_{k=1}^r \rho_k(x) A_k]\, x + Bu
-$$
-enables the nonlinear feedback design through truncated expansions of the SDRE.
-
-
-
-# How to Design an LPV approximation
-
-A general procedure
-
----
-
-If $f(0)=0$ and under mild conditions, the flow $f$ can be factorized
-$$
-f( x) = [A(x)]\,x
-$$ 
-with some $A\colon \mathbb R^{n} \to \mathbb R^{n\times n}$.
-
-. . .
-
-1. If $f$ has a strongly continuous Jacobian $\partial f$, then
-$$
-f(x) = [\int_0^1 \partial f(sx)\mathsf{d} s]\, x
-$$
-2. The trivial choice of
-$$
-f(x) = [\frac{1}{x^Tx}f(x)x^T]\,x
-$$
-doesn't work well -- neither do the improvements [@LinVL15].
-
-
----
-
-For the factorization $f(x)=A(x)\,x$, one can say that
-
-1. it is not unique
-2. it can be a design parameter
-3. often, it is indicated by the structure.
-
----
-
-Now, we have an *state-dependent coefficient* representation
-
-$$ f(x) = A(x)\,x.$$
-
-. . .
-
-## How to obtain an LPV representation/approximation?
-
-
----
-
-## $\dot x = A(x)\,x + Bu$
-
- * Trivially, this is an LPV representation 
- $$
- \dot x = A(\rho(x))\, x + Bu
- $$
- with $\rho(x) = x$.
-
- * Take any model order reduction scheme that compresses (via $\mathcal P$) the state and lifts it back (via $\mathcal L$) so that
- $$
- \tilde x = \mathcal L(\hat x) = \mathcal L (\mathcal P(x)) \approx x
- $$
-
-. . .
-
- * Then $\rho = \mathcal P(x)$ gives a low-dimensional LPV approximation by means of
- $$
- A(x)\,x \approx A(\tilde x)\, x = A(\mathcal L \rho (x))\,x.
- $$
-
----
-
-## Observation
-
-   * If $x\mapsto A(x)$ itself is affine linear 
-   * and $\mathcal L$ is linear, 
-   * then
-   $$
-   \dot x \approx A(\mathcal L \rho(x))\,x + Bu = [A_0 + \sum_{i=1}^r \rho_i(x) A_i]\, x + Bu
-   $$
-   is **affine** with 
-
-     * $\rho_i(x)$ being the components of $\rho(x)\in \mathbb R^r$ 
-     * and constant matrices $A_0$, $A_1$, ..., $A_r \in \mathbb R^{n\times n}$.
-
-## Intermediate Summary
-
- * Generally, a nonlinear $f$ can be factorized as $f(x) = A(x)\,x$.
-
- * Model order reduction provides a low dimensional LPV representation $A(x)\,x\approx A(\mathcal \rho(x))\,x$.
-
- * The needed affine-linearity in $\rho$ follows from system's structure (or from another layer of approximation (see, e.g, [@KoeT20]).
-
--->
 </div>
+</section>
+<section id="intermediate-summary" class="slide level2">
+<h2>Intermediate Summary</h2>
+<p>A representation/approximation of the nonlinear system via <span
+class="math display">\[
+\dot x = [A_0 + \sum_{k=1}^r \rho_k(x) A_k]\, x + Bu
+\]</span> enables the nonlinear feedback design through truncated
+expansions of the SDRE.</p>
+</section></section>
+<section>
+<section id="how-to-design-an-lpv-approximation"
+class="title-slide slide level1">
+<h1>How to Design an LPV approximation</h1>
+<p>A general procedure</p>
+</section>
+<section class="slide level2">
+
+<p>If <span class="math inline">\(f(0)=0\)</span> and under mild
+conditions, the flow <span class="math inline">\(f\)</span> can be
+factorized <span class="math display">\[
+f( x) = [A(x)]\,x
+\]</span> with some <span class="math inline">\(A\colon \mathbb R^{n}
+\to \mathbb R^{n\times n}\)</span>.</p>
+<div class="fragment">
+<ol type="1">
+<li>If <span class="math inline">\(f\)</span> has a strongly continuous
+Jacobian <span class="math inline">\(\partial f\)</span>, then <span
+class="math display">\[
+f(x) = [\int_0^1 \partial f(sx)\mathsf{d} s]\, x
+\]</span></li>
+<li>The trivial choice of <span class="math display">\[
+f(x) = [\frac{1}{x^Tx}f(x)x^T]\,x
+\]</span> doesn’t work well – neither do the improvements <span
+class="citation" data-cites="LinVL15">(Lin, Vandewalle, and Liang
+2015)</span>.</li>
+</ol>
+</div>
+</section>
+<section class="slide level2">
+
+<p>For the factorization <span
+class="math inline">\(f(x)=A(x)\,x\)</span>, one can say that</p>
+<ol type="1">
+<li>it is not unique</li>
+<li>it can be a design parameter</li>
+<li>often, it is indicated by the structure.</li>
+</ol>
+</section>
+<section class="slide level2">
+
+<p>Now, we have an <em>state-dependent coefficient</em>
+representation</p>
+<p><span class="math display">\[ f(x) = A(x)\,x.\]</span></p>
+</section>
+<section id="how-to-obtain-an-lpv-representationapproximation"
+class="slide level2">
+<h2>How to obtain an LPV representation/approximation?</h2>
+</section>
+<section id="dot-x-axx-bu" class="slide level2">
+<h2><span class="math inline">\(\dot x = A(x)\,x + Bu\)</span></h2>
+<ul>
+<li><p>Trivially, this is an LPV representation <span
+class="math display">\[
+\dot x = A(\rho(x))\, x + Bu
+\]</span> with <span class="math inline">\(\rho(x) =
+x\)</span>.</p></li>
+<li><p>Take any model order reduction scheme that compresses (via <span
+class="math inline">\(\mathcal P\)</span>) the state and lifts it back
+(via <span class="math inline">\(\mathcal L\)</span>) so that <span
+class="math display">\[
+\tilde x = \mathcal L(\hat x) = \mathcal L (\mathcal P(x)) \approx x
+\]</span></p></li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Then <span class="math inline">\(\rho = \mathcal P(x)\)</span> gives
+a low-dimensional LPV approximation by means of <span
+class="math display">\[
+A(x)\,x \approx A(\tilde x)\, x = A(\mathcal L \rho (x))\,x.
+\]</span></li>
+</ul>
+</div>
+</section>
+<section id="observation" class="slide level2">
+<h2>Observation</h2>
+<ul>
+<li><p>If <span class="math inline">\(x\mapsto A(x)\)</span> itself is
+affine linear</p></li>
+<li><p>and <span class="math inline">\(\mathcal L\)</span> is
+linear,</p></li>
+<li><p>then <span class="math display">\[
+   \dot x \approx A(\mathcal L \rho(x))\,x + Bu = [A_0 + \sum_{i=1}^r
+\rho_i(x) A_i]\, x + Bu
+   \]</span> is <strong>affine</strong> with</p>
+<ul>
+<li><span class="math inline">\(\rho_i(x)\)</span> being the components
+of <span class="math inline">\(\rho(x)\in \mathbb R^r\)</span></li>
+<li>and constant matrices <span class="math inline">\(A_0\)</span>,
+<span class="math inline">\(A_1\)</span>, …, <span
+class="math inline">\(A_r \in \mathbb R^{n\times n}\)</span>.</li>
+</ul></li>
+</ul>
+</section>
+<section id="intermediate-summary-1" class="slide level2">
+<h2>Intermediate Summary</h2>
+<ul>
+<li><p>Generally, a nonlinear <span class="math inline">\(f\)</span> can
+be factorized as <span class="math inline">\(f(x) =
+A(x)\,x\)</span>.</p></li>
+<li><p>Model order reduction provides a low dimensional LPV
+representation <span class="math inline">\(A(x)\,x\approx A(\mathcal
+\rho(x))\,x\)</span>.</p></li>
+<li><p>The needed affine-linearity in <span
+class="math inline">\(\rho\)</span> follows from system’s structure (or
+from another layer of approximation (see, e.g, <span class="citation"
+data-cites="KoeT20">(Koelewijn and Tóth 2020)</span>).</p></li>
+</ul>
 </section></section>
 <section>
 <section id="numerical-realization" class="title-slide slide level1">
@@ -435,12 +450,20 @@ class="math inline">\(L_k\)</span>s.</p></li>
 </section>
 <section id="step-1-compute-the-lpv-approximation" class="slide level2">
 <h2>Step-1 – Compute the LPV Approximation</h2>
-<p>We use</p>
+<p>We use POD coordinates with the matrix <span
+class="math inline">\(V\in \mathbb R^{n\times r}\)</span> of POD modes
+<span class="math inline">\(v_k\)</span></p>
 <ul>
-<li><p>POD coordinates <span class="math inline">\(\rho(x) =
-V_r^Tx\)</span></p></li>
-<li><p>and exploit the bilinear structure of the convection.</p></li>
+<li><p><span class="math inline">\(\rho(x) = V^T x\)</span>,</p></li>
+<li><p><span class="math inline">\(\tilde x =
+V\rho(x)=\sum_{k=1}^r\rho_i(x)v_k.\)</span></p></li>
 </ul>
+<div class="fragment">
+<p>Then: <span class="math display">\[N(x,x)\approx N(\tilde x, x) =
+N(\sum_{k=1}^r\rho_i(x)v_k, x) = \sum_{k=1}^r\rho_i(x) N(v_k, x)
+\]</span> which is readily realized as <span class="math display">\[
+[\sum_{k=1}^r\rho_i(x) A_k]\,x.\]</span></p>
+</div>
 </section>
 <section id="step-2-compute-p_0-and-the-l_ks" class="slide level2">
 <h2>Step-2 – Compute <span class="math inline">\(P_0\)</span> and the
@@ -541,6 +564,36 @@ data-background-image="pics/parametermap.png"
 data-background-size="contain">
 <h2 data-background-image="pics/parametermap.png"
 data-background-size="contain"></h2>
+</section>
+<section id="conclusion-for-the-numerical-results" class="slide level2">
+<h2>Conclusion for the Numerical Results</h2>
+<ul>
+<li><p>Measurable and reliable improvements with respect to <span
+class="math inline">\(\alpha\)</span></p>
+<ul>
+<li><em>more performant feedback action at higher
+regularization</em></li>
+</ul></li>
+</ul>
+<div class="fragment">
+<ul>
+<li><p>no measurable performance gain with respect to <span
+class="math inline">\(t_{\mathsf c}\)</span></p>
+<ul>
+<li><em>no extension of the domain of attraction</em></li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><p>still much space for improvement</p>
+<ul>
+<li>find better bases for the parametrization?</li>
+<li>increase the <code>r</code>?</li>
+<li>second order truncation of the SDRE?</li>
+</ul></li>
+</ul>
+</div>
 </section></section>
 <section>
 <section id="conclusion" class="title-slide slide level1">
@@ -553,25 +606,24 @@ data-background-size="contain"></h2>
 <li>General approach to model <strong>structure</strong> reduction by
 low-dimensional affine LPV systems.</li>
 </ul>
-<p><span class="math display">\[f(x) \quad \to\quad  [A_0 +
+<p><span class="math display">\[f(x) \quad
+\to\quad  A(x)\,x\quad  \to\quad  \tilde
+A(\rho(x))\,x\quad  \to\quad  [A_0 +
 \sum_{k=1}^r\rho_k(x)A_k]\,x\]</span></p>
 <ul>
 <li><p>Proof of concept for nonlinear controller design with POD and
 truncated SDRE <span class="citation" data-cites="HeiW23">(Heiland and
 Werner 2023)</span>.</p></li>
-<li><p>still much space for improvement</p></li>
+<li><p>General and performant but still heuristic approach.</p></li>
 </ul>
-</section>
-<section class="slide level2">
-
+<div class="fragment">
 <ul>
 <li><p>Detailed roadmap for developing the LPV (systems) theory is
 available.</p></li>
-<li><p>Funding by DFG.</p></li>
-<li><p><strong>PhD student wanted</strong>!</p></li>
-<li><p>See <a href="www.janheiland.de">www.janheiland.de</a> an apply by
-August 3rd</p></li>
+<li><p>PhD student/PostDoc wanted!</p></li>
+<li><p>Just contact me!</p></li>
 </ul>
+</div>
 <div class="fragment">
 <p>Thank You!</p>
 </div>
