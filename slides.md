@@ -1,8 +1,8 @@
 ---
 author: 
  - Jan Heiland & Peter Benner & Steffen Werner (MPI Magdeburg)
-title: Low-dimensional LPV approximations for nonlinear control
-subtitle: Blacksburg -- May 2023
+title: Low-complexity systems approximations for nonlinear feedback design
+subtitle: DMV -- Ilmenau -- September 2023
 title-slide-attributes:
     data-background-image: pics/mpi-bridge.gif
 parallaxBackgroundImage: pics/csc-en.svg
@@ -44,17 +44,6 @@ Stabilization of a laminar flow
 
 :::
 
-## Control of Nonlinear & Large-Scale Systems
-
-A general approach would include
-
- * powerful backends (linear algebra / optimization)
- * exploitation of general structures
- * model order reduction
- * data-driven surrogate models
- * all of it?!
-
-
 # LPV Representation
 
 \begin{align}
@@ -74,28 +63,11 @@ for nonlinear controller comes with
 
 and extensive theory on
 
- * LPV controller design
+ * LPV controller design; see, e.g. [@PeaA01] and [@ApkGB95]
 
 . . .
 
-Spoiler: 
-
  In this talk, we will consider LPV series expansions of control laws.
-
----
-
-## LPV system approaches
-
-For linear parameter-varying systems
-$$
-\dot x = A(\rho(x))\,x + Bu
-$$
-there exist established methods that provide control laws based one
-
- * robustness against parameter variations [@PeaA01]
- * adaption with the parameter, i.e. *gain scheduling*, [@ApkGB95]
-
-A major issue: require solutions of coupled LMI systems.
 
 
 # SDRE series expansion
@@ -128,7 +100,7 @@ Then $$u=-\frac{1}{\alpha}B^T\Pi(x)\,x$$ is an optimal feedback for the control 
 
 ---
 
-In **Praxis**, parts of the HJB are discarded and we use $\Pi(x)$ that solely solves the state-dependent Riccati equation (SDRE)
+In **practice**, parts of the HJB are discarded and we use $\Pi(x)$ that solely solves the state-dependent Riccati equation (SDRE)
 $$
 \Pi(x) A(\rho(x))+A^T(\rho(x)) \Pi(x)-\frac{1}{\alpha} \Pi(x) BB^T\Pi(x)=-C^TC,
 $$
@@ -212,6 +184,8 @@ $$
 Cp., e.g.,  [@BeeTB00] and [@AllKS23].
 
 
+<!--
+
 ## Intermediate Summary
 
 A representation/approximation of the nonlinear system via
@@ -254,15 +228,6 @@ For the factorization $f(x)=A(x)\,x$, one can say that
 1. it is not unique
 2. it can be a design parameter
 3. often, it is indicated by the structure.
-
-. . .
-
-... like in the advective term in the *Navier-Stokes* equations:
-$$
-(v\cdot \nabla)v = \mathcal A_s(v)\,v
-$$
-with $s\in[0,1]$ and the linear operator $\mathcal A_s(v)$ defined via 
-$$\mathcal A_s(v)\,w := s\,(v\cdot \nabla)w + (1-s)\, (w\cdot \nabla)v.$$
 
 ---
 
@@ -319,6 +284,8 @@ $$ f(x) = A(x)\,x.$$
  * Model order reduction provides a low dimensional LPV representation $A(x)\,x\approx A(\mathcal \rho(x))\,x$.
 
  * The needed affine-linearity in $\rho$ follows from system's structure (or from another layer of approximation (see, e.g, [@KoeT20]).
+
+-->
 
 # Numerical Realization
 
@@ -388,18 +355,12 @@ $$f(x)\approx A_0x +  \sum_{k=1}^r \rho_k(x)A_kx.$$
 
 ## Step-1 -- Compute the LPV Approximation
 
-We use POD coordinates with the matrix $V\in \mathbb R^{n\times r}$ of POD modes $v_k$
+We use 
 
- * $\rho(x) = V^T x$, 
+ * POD coordinates $\rho(x) = V_r^Tx$
 
- * $\tilde x = V\rho(x)=\sum_{k=1}^r\rho_i(x)v_k.$
+ * and exploit the bilinear structure of the convection.
 
-. . .
-
-Then:
-$$N(x,x)\approx N(\tilde x, x) = N(\sum_{k=1}^r\rho_i(x)v_k, x) = \sum_{k=1}^r\rho_i(x) N(v_k, x) $$
-which is readily realized as
-$$ [\sum_{k=1}^r\rho_i(x) A_k]\,x.$$
 
 ## Step-2 -- Compute $P_0$ and the $L_k$s
 
@@ -493,46 +454,28 @@ Less regularization
 ## {data-background-image="pics/parametermap.png" data-background-size="contain"}
 
 
----
-
-## Conclusion for the Numerical Results
-
-* Measurable and reliable improvements with respect to $\alpha$
-
-  * *more performant feedback action at higher regularization*
-
-. . .
-
-* no measurable performance gain with respect to $t_{\mathsf c}$
-
-  * *no extension of the domain of attraction*
-
-. . .
-
-* still much space for improvement
-
-  * find better bases for the parametrization?
-  * increase the `r`?
-  * second order truncation of the SDRE?
-
-
 # Conclusion
 
 ## ... and Outlook
 
  * General approach to model **structure** reduction by low-dimensional affine LPV systems.
 
- $$f(x) \quad \to\quad  A(x)\,x\quad  \to\quad  \tilde A(\rho(x))\,x\quad  \to\quad  [A_0 + \sum_{k=1}^r\rho_k(x)A_k]\,x$$
+ $$f(x) \quad \to\quad  [A_0 + \sum_{k=1}^r\rho_k(x)A_k]\,x$$
 
  * Proof of concept for nonlinear controller design with POD and truncated SDRE [@HeiW23].
 
- * General and performant but still heuristic approach.
+ * still much space for improvement
 
-. . .
+
+---
 
 * Detailed roadmap for developing the LPV (systems) theory is available.
 
-* PhD student wanted!
+* Funding by DFG.
+
+* **PhD student wanted**!
+
+* See [www.janheiland.de](www.janheiland.de) an apply by August 3rd
 
 . . .
 
